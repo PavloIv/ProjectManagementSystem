@@ -1,6 +1,6 @@
 package ua.ip.jdbc.dao;
 
-import ua.ip.jdbc.DatabaseSqlManagerConnector;
+import ua.ip.jdbc.storage.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Companies;
 
 import java.sql.Connection;

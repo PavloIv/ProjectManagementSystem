@@ -1,7 +1,7 @@
 package ua.ip.jdbc.dao;
 
 import org.junit.jupiter.api.Test;
-import ua.ip.jdbc.DatabaseSqlManagerConnector;
+import ua.ip.jdbc.storage.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Developers;
 
 import java.sql.SQLException;
@@ -17,11 +17,7 @@ class DevelopersDaoTest {
     DevelopersDao testDevelopersDao;
 
     {
-        try {
-            testDevelopersDao = new DevelopersDao(mySqlConnector);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        testDevelopersDao = new DevelopersDao(mySqlConnector);
     }
 
     @Test

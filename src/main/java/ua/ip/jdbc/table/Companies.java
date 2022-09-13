@@ -1,7 +1,5 @@
 package ua.ip.jdbc.table;
 
-import lombok.Data;
-
 import java.util.Objects;
 
 public class Companies {

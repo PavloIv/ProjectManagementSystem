@@ -1,7 +1,8 @@
 package ua.ip.jdbc.dao;
 
-import ua.ip.jdbc.DatabaseSqlManagerConnector;
+import ua.ip.jdbc.storage.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Projects;
+import ua.ip.jdbc.table.ProjectsV2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +18,7 @@ public class ProjectsDao implements ServiceCrud<Projects>{
     private final PreparedStatement SELECT_ALL_PROJECTS;
     private final PreparedStatement UPDATE_PROJECT;
     private final PreparedStatement DELETE_PROJECT;
+    private PreparedStatement PROJECT_LIST;
 
     public ProjectsDao(DatabaseSqlManagerConnector sqlConnector) throws SQLException {
         this.sqlConnector = sqlConnector;
@@ -29,6 +31,11 @@ public class ProjectsDao implements ServiceCrud<Projects>{
         UPDATE_PROJECT = connection.prepareStatement("UPDATE projects SET id = ?,name = ?," + "description = ?," +
                 "cost = ?, company_id = ?,customer_id = ?  WHERE id = ?");
         DELETE_PROJECT = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
+        PROJECT_LIST = connection.prepareStatement("SELECT  creation_date,name," +
+                "COUNT(developers_projects.developer_id) as Number_programer_on_project " +
+                "FROM projects LEFT JOIN developers_projects ON projects.id = developers_projects.project_id " +
+                "GROUP BY projects.id " +
+                "ORDER by projects.id");
     }
 
     @Override
@@ -114,5 +121,24 @@ public class ProjectsDao implements ServiceCrud<Projects>{
         project.setCompany_id(rs.getInt("company_id"));
         project.setCustomer_id(rs.getInt("customer_id"));
         return project;
+    }
+
+    public List<ProjectsV2> showProjectsList() throws SQLException {
+        List<ProjectsV2> programmerLevel = new ArrayList<>();
+        try (ResultSet rs = PROJECT_LIST.executeQuery()) {
+            while (rs.next()) {
+                programmerLevel.add(convertProjectsV2(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return programmerLevel;
+    }
+    private ProjectsV2 convertProjectsV2(ResultSet resultSet) throws SQLException {
+        ProjectsV2 projectsV2 = new ProjectsV2();
+        projectsV2.setCreationDate(String.valueOf(resultSet.getDate("creation_date")));
+        projectsV2.setName(resultSet.getString("name"));
+        projectsV2.setNumberProgramerOnProject(resultSet.getInt("Number_programer_on_project"));
+        return projectsV2;
     }
 }

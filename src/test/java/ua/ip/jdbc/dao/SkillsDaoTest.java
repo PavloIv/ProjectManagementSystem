@@ -1,7 +1,7 @@
 package ua.ip.jdbc.dao;
 
 import org.junit.jupiter.api.Test;
-import ua.ip.jdbc.DatabaseSqlManagerConnector;
+import ua.ip.jdbc.storage.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Skills;
 
 import java.sql.SQLException;

@@ -17,6 +17,13 @@ public  class Developers {
         this.salary = salary;
     }
 
+    public Developers(String name, Integer age, String sex, Integer salary) {
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.salary = salary;
+    }
+
     public Developers() {
     }
 
