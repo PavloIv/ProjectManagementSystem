@@ -97,7 +97,7 @@ public class SkillsCrudState extends CliState{
 
     private void delete() {
         System.out.println("Write skill id to delete:");
-        int skillId = fsm.writeDigit();
+        Integer skillId = fsm.writeDigit();
         skillsDao.delete(skillId);
         System.out.println("Skill delete is complete.");
     }

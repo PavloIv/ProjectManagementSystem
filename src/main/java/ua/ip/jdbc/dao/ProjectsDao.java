@@ -2,7 +2,7 @@ package ua.ip.jdbc.dao;
 
 import ua.ip.jdbc.storage.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Projects;
-import ua.ip.jdbc.table.ProjectsFormatCreationDateNameNumberProgramer;
+import ua.ip.jdbc.table.ProjectsFormatCreationDateNameNumberProgrammer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class ProjectsDao implements ServiceCrud<Projects> {
     private final PreparedStatement SELECT_ALL_PROJECTS;
     private final PreparedStatement UPDATE_PROJECT;
     private final PreparedStatement DELETE_PROJECT;
-    private PreparedStatement PROJECT_LIST;
+    private final PreparedStatement PROJECT_LIST;
 
     public ProjectsDao(DatabaseSqlManagerConnector sqlConnector) {
         this.sqlConnector = sqlConnector;
@@ -26,10 +26,10 @@ public class ProjectsDao implements ServiceCrud<Projects> {
         try {
             INSERT_PROJECT = connection.prepareStatement("INSERT INTO projects" +
                     "(id,name,description,cost,company_id,customer_id) VALUES(?,?,?,?,?,?)");
-            SELECT_PROJECT_BY_ID = connection.prepareStatement("SELECT id,name,description,cost,company_id,customer_id" +
-                    " FROM projects WHERE id = ?");
+            SELECT_PROJECT_BY_ID = connection.prepareStatement("SELECT id,name,description,cost,company_id," +
+                    "customer_id FROM projects WHERE id = ?");
             SELECT_ALL_PROJECTS = connection.prepareStatement("SELECT * FROM projects");
-            UPDATE_PROJECT = connection.prepareStatement("UPDATE projects SET id = ?,name = ?," + "description = ?," +
+            UPDATE_PROJECT = connection.prepareStatement("UPDATE projects SET id = ?,name = ?,description = ?," +
                     "cost = ?, company_id = ?,customer_id = ?  WHERE id = ?");
             DELETE_PROJECT = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
             PROJECT_LIST = connection.prepareStatement("SELECT  creation_date,name," +
@@ -131,8 +131,8 @@ public class ProjectsDao implements ServiceCrud<Projects> {
         return project;
     }
 
-    public List<ProjectsFormatCreationDateNameNumberProgramer> showProjectsListInFormat() {
-        List<ProjectsFormatCreationDateNameNumberProgramer> programmerLevel = new ArrayList<>();
+    public List<ProjectsFormatCreationDateNameNumberProgrammer> showProjectsListInFormat() {
+        List<ProjectsFormatCreationDateNameNumberProgrammer> programmerLevel = new ArrayList<>();
         try (ResultSet rs = PROJECT_LIST.executeQuery()) {
             while (rs.next()) {
                 programmerLevel.add(convertProjectsV2(rs));
@@ -143,11 +143,16 @@ public class ProjectsDao implements ServiceCrud<Projects> {
         return programmerLevel;
     }
 
-    private ProjectsFormatCreationDateNameNumberProgramer convertProjectsV2(ResultSet resultSet) throws SQLException {
-        ProjectsFormatCreationDateNameNumberProgramer projectsFormatCreationDateNameNumberProgramer = new ProjectsFormatCreationDateNameNumberProgramer();
-        projectsFormatCreationDateNameNumberProgramer.setCreationDate(String.valueOf(resultSet.getDate("creation_date")));
-        projectsFormatCreationDateNameNumberProgramer.setName(resultSet.getString("name"));
-        projectsFormatCreationDateNameNumberProgramer.setNumberProgramerOnProject(resultSet.getInt("Number_programer_on_project"));
+    private ProjectsFormatCreationDateNameNumberProgrammer convertProjectsV2(ResultSet resultSet) throws SQLException {
+        ProjectsFormatCreationDateNameNumberProgrammer projectsFormatCreationDateNameNumberProgramer =
+                new ProjectsFormatCreationDateNameNumberProgrammer();
+        projectsFormatCreationDateNameNumberProgramer
+                .setCreationDate(String.valueOf(resultSet.getDate("creation_date")));
+        projectsFormatCreationDateNameNumberProgramer
+                .setName(resultSet.getString("name"));
+        projectsFormatCreationDateNameNumberProgramer
+                .setNumberProgrammerOnProject(resultSet.getInt("Number_programer_on_project"));
+
         return projectsFormatCreationDateNameNumberProgramer;
     }
 }

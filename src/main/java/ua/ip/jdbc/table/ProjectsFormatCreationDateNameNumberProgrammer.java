@@ -1,13 +1,10 @@
 package ua.ip.jdbc.table;
 
-public class ProjectsFormatCreationDateNameNumberProgramer {
+public class ProjectsFormatCreationDateNameNumberProgrammer {
     private String creationDate;
     private String name;
-    private Integer numberProgramerOnProject;
+    private Integer numberProgrammerOnProject;
 
-    public String getCreationDate() {
-        return creationDate;
-    }
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
@@ -21,12 +18,8 @@ public class ProjectsFormatCreationDateNameNumberProgramer {
         this.name = name;
     }
 
-    public Integer getNumberProgramerOnProject() {
-        return numberProgramerOnProject;
-    }
-
-    public void setNumberProgramerOnProject(Integer numberProgramerOnProject) {
-        this.numberProgramerOnProject = numberProgramerOnProject;
+    public void setNumberProgrammerOnProject(Integer numberProgrammerOnProject) {
+        this.numberProgrammerOnProject = numberProgrammerOnProject;
     }
 
     @Override
@@ -34,7 +27,7 @@ public class ProjectsFormatCreationDateNameNumberProgramer {
         return "\n" + "{" +
                 "creationDate='" + creationDate + '\'' +
                 ", name='" + name + '\'' +
-                ", numberProgramerOnProject=" + numberProgramerOnProject +
+                ", numberProgrammerOnProject=" + numberProgrammerOnProject +
                 '}' + "\n";
     }
 }

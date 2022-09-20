@@ -25,7 +25,8 @@ public class SkillsDao implements ServiceCrud<Skills> {
             INSERT_SKILL = connection.prepareStatement("INSERT INTO skills(id,language,level) VALUES(?,?,?)");
             SELECT_SKILL_BY_ID = connection.prepareStatement("SELECT id,language,level FROM skills WHERE id = ?");
             SELECT_ALL_SKILLS = connection.prepareStatement("SELECT * FROM skills");
-            UPDATE_SKILL = connection.prepareStatement("UPDATE skills SET id = ?,language = ?,level = ? WHERE id = ?");
+            UPDATE_SKILL = connection.prepareStatement("UPDATE skills SET id = ?,language = ?,level = ?" +
+                    " WHERE id = ?");
             DELETE_SKILL = connection.prepareStatement("DELETE FROM skills WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -61,7 +62,6 @@ public class SkillsDao implements ServiceCrud<Skills> {
             return null;
         }
     }
-
 
     @Override
     public List<Skills> findAll() {
@@ -116,5 +116,4 @@ public class SkillsDao implements ServiceCrud<Skills> {
 
         return skill;
     }
-
 }

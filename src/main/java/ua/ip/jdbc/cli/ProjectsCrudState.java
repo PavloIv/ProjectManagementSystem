@@ -17,6 +17,7 @@ public class ProjectsCrudState extends CliState{
         System.out.println("'read' for see list all projects ");
         System.out.println("'update' for update project with id");
         System.out.println("'delete' for delete project with id");
+        System.out.println("'find' for see project with id");
         System.out.println("'show' for see list programmer in format creationDate nameNumber numberProgrammerOnProject");
         System.out.println("'back' for back to previous menu");
         projectsDao = new ProjectsDao(fsm.getSqlConnector());
@@ -122,7 +123,7 @@ public class ProjectsCrudState extends CliState{
 
     private void delete() {
         System.out.println("Write project id to delete:");
-        int projectId = fsm.writeDigit();
+        Integer projectId = fsm.writeDigit();
         projectsDao.delete(projectId);
         System.out.println("Project delete is complete.");
     }

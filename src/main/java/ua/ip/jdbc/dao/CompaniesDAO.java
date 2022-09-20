@@ -23,10 +23,10 @@ public class CompaniesDAO implements ServiceCrud<Companies> {
         this.sqlConnector = sqlConnector;
         Connection connection = sqlConnector.getConnection();
         try {
-            INSERT_COMPANY = connection.prepareStatement("INSERT INTO companies (id,name,year_of_foundation) " +
-                    "VALUES(?,?,?)");
-            SELECT_COMPANIES_BY_ID = connection.prepareStatement("SELECT id,name,year_of_foundation FROM companies " +
-                    "WHERE id = ?");
+            INSERT_COMPANY = connection.prepareStatement("INSERT INTO companies (id,name,year_of_foundation)"+
+                    " VALUES(?,?,?)");
+            SELECT_COMPANIES_BY_ID = connection.prepareStatement("SELECT id,name,year_of_foundation FROM companies"+
+                    " WHERE id = ?");
             SELECT_ALL_COMPANIES = connection.prepareStatement("SELECT * FROM companies");
             UPDATE_COMPANY = connection.prepareStatement("UPDATE companies SET id = ?,name = ?," +
                     "year_of_foundation = ?  WHERE id = ?");
@@ -67,7 +67,7 @@ public class CompaniesDAO implements ServiceCrud<Companies> {
     }
 
     @Override
-    public List findAll() {
+    public List<Companies> findAll() {
         List<Companies> allCompanies = new ArrayList<>();
         try (ResultSet rs = SELECT_ALL_COMPANIES.executeQuery()) {
             while (rs.next()) {

@@ -3,10 +3,10 @@ package ua.ip.jdbc.cli;
 import ua.ip.jdbc.dao.CompaniesDAO;
 import ua.ip.jdbc.table.Companies;
 
-public class ComapanyCrudState extends CliState {
+public class CompanyCrudState extends CliState {
 
     private CompaniesDAO companiesDAO;
-    public ComapanyCrudState(CliFSM fsm) {
+    public CompanyCrudState(CliFSM fsm) {
         super(fsm);
     }
     @Override
@@ -16,6 +16,7 @@ public class ComapanyCrudState extends CliState {
         System.out.println("'read' for see list all companies ");
         System.out.println("'update' for update company with id");
         System.out.println("'delete' for delete company with id");
+        System.out.println("'find' for see company with id");
         System.out.println("'back' for back to previous menu");
         companiesDAO = new CompaniesDAO(fsm.getSqlConnector());
         String command = fsm.getScanner().nextLine();
@@ -26,7 +27,7 @@ public class ComapanyCrudState extends CliState {
         boolean back = false;
         switch (command) {
             case "create":
-                createNewDeveloper();
+                create();
                 break;
             case "read":
                 readTable();
@@ -54,7 +55,7 @@ public class ComapanyCrudState extends CliState {
         }
     }
 
-    private void createNewDeveloper() {
+    private void create() {
         System.out.println("Write company name:");
         String companyName = fsm.getScanner().nextLine();
 

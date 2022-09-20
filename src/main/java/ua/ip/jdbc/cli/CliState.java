@@ -6,8 +6,8 @@ public class CliState {
     public CliState(CliFSM fsm) {
         this.fsm = fsm;
     }
-    public void init(){
 
+    public void init() {
     }
 
     public void workingWithDeveloperCrud() {
@@ -24,8 +24,6 @@ public class CliState {
 
     public void workingWithProjectCrud() {
     }
-
-    public void comeBack() {}
 
     public void unknownTable(String cmd){
     }

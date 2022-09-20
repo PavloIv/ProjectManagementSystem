@@ -17,6 +17,7 @@ public class CustomerCrudState extends CliState{
         System.out.println("'read' for see list all customers ");
         System.out.println("'update' for update customer with id");
         System.out.println("'delete' for delete customer with id");
+        System.out.println("'find' for see customer with id");
         System.out.println("'back' for back to previous menu");
         customerDao = new CustomerDao(fsm.getSqlConnector());
         String command = fsm.getScanner().nextLine();

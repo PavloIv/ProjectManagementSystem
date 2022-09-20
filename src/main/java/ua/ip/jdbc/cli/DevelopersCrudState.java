@@ -18,12 +18,13 @@ public class DevelopersCrudState extends CliState {
         System.out.println("'read' for see list all developers ");
         System.out.println("'update' for update developer with id");
         System.out.println("'delete' for delete developer with id");
-        System.out.println("'find' for see  developer with id" );
+        System.out.println("'find' for see  developer with id");
         System.out.println("'salaryProject' for see total salary on project with name");
         System.out.println("'salaryId' for see total salary on project with id");
         System.out.println("'showProject' for see  programmer on project with name");
         System.out.println("'showId' for see  programmer on project with id");
         System.out.println("'showLanguage' for see  programmer develop on language");
+        System.out.println("'showJava' for see  programmer develop on Java");
         System.out.println("'showLevel' for see programmer with skill level");
         System.out.println("'back' for back to previous menu");
         developersDao = new DevelopersDao(fsm.getSqlConnector());
@@ -35,7 +36,7 @@ public class DevelopersCrudState extends CliState {
         boolean back = false;
         switch (command) {
             case "create":
-                createNewDeveloper();
+                create();
                 break;
             case "read":
                 readTable();
@@ -44,7 +45,7 @@ public class DevelopersCrudState extends CliState {
                 update();
                 break;
             case "delete":
-                deleteDeveloper();
+                delete();
                 break;
             case "find":
                 findDeveloperWithId();
@@ -64,6 +65,9 @@ public class DevelopersCrudState extends CliState {
             case "showLanguage":
                 showProgrammerOnLanguage();
                 break;
+            case "showJava":
+                showProgrammerOnJava();
+                break;
             case "showLevel":
                 showProgrammersWithLevel();
                 break;
@@ -81,7 +85,7 @@ public class DevelopersCrudState extends CliState {
         }
     }
 
-    private void createNewDeveloper() {
+    private void create() {
         System.out.println("Write developer name:");
         String developerName = fsm.getScanner().nextLine();
 
@@ -127,16 +131,16 @@ public class DevelopersCrudState extends CliState {
         System.out.println("Write developer salary:");
         Integer developerSalary = fsm.writeDigit();
 
-        Developers developer = new Developers(developerId,developerName,developerAge,developerSex,developerSalary);
+        Developers developer = new Developers(developerId, developerName, developerAge, developerSex, developerSalary);
 
         developersDao.update(developer);
 
         System.out.printf("Developer with id = %s update.", developerId);
     }
 
-    private void deleteDeveloper() {
+    private void delete() {
         System.out.println("Write developer id to delete:");
-        int developerId = fsm.writeDigit();
+        Integer developerId = fsm.writeDigit();
         developersDao.delete(developerId);
         System.out.println("Developer delete is complete.");
     }
@@ -189,11 +193,16 @@ public class DevelopersCrudState extends CliState {
         System.out.println(developersDao.showProgrammerOnLanguage(languageName));
     }
 
-    private void showProgrammersWithLevel() {
-        System.out.println("Write language:");
-        String languageName = fsm.getScanner().nextLine();
+    private void showProgrammerOnJava() {
+        System.out.print("List of programmers working on the Java :");
+        System.out.println(developersDao.showProgrammerOnLanguageJava());
+    }
 
-        System.out.printf("List of programmers working on the language %s : ", languageName);
-        System.out.println(developersDao.showProgrammerOnLanguage(languageName));
+    private void showProgrammersWithLevel() {
+        System.out.println("Write level:");
+        String level = fsm.getScanner().nextLine();
+
+        System.out.printf("List of programmers with skill level %s : ", level);
+        System.out.println(developersDao.showProgrammersWithLevel(level));
     }
 }

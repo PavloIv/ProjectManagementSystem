@@ -20,7 +20,7 @@ public class IdleState extends CliState{
     }
     @Override
     public void workingWithCompanyCrud() {
-        fsm.setState(new ComapanyCrudState(fsm));
+        fsm.setState(new CompanyCrudState(fsm));
     }
     @Override
     public void workingWithCustomerCrud() {

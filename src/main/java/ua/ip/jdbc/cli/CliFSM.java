@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class CliFSM {
     private CliState state;
     private  DatabaseSqlManagerConnector sqlConnector;
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public CliFSM(DatabaseSqlManagerConnector sqlConnector) {
         state = new IdleState(this);
@@ -16,6 +16,7 @@ public class CliFSM {
         scanner = new Scanner(System.in);
         startInputLoop();
     }
+
     public void printedStartMessage(){
         System.out.println("Please ,write table name for further work,from list:");
         System.out.println("developers");
@@ -38,7 +39,6 @@ public class CliFSM {
     public Scanner getScanner() {
         return scanner;
     }
-
 
     private void startInputLoop() {
 
@@ -67,7 +67,6 @@ public class CliFSM {
                 default:
                     unknownTable(command);
                     break;
-
             }
         }
     }
@@ -96,7 +95,7 @@ public class CliFSM {
         state.unknownTable(cmd);
     }
     public int writeDigit() {
-        Integer digit = null;
+        int digit;
         while (true) {
             try {
                 digit = Integer.parseInt(getScanner().nextLine());

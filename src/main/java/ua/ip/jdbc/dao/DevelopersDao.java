@@ -18,13 +18,13 @@ public class DevelopersDao implements ServiceCrud<Developers> {
     private final PreparedStatement SELECT_ALL_DEVELOPERS;
     private final PreparedStatement UPDATE_DEVELOPER;
     private final PreparedStatement DELETE_DEVELOPER;
-    private PreparedStatement SALARY_ON_PROJECT_FROM_NAME;
-    private PreparedStatement SALARY_ON_PROJECT_FROM_ID;
-    private PreparedStatement PROGRAMMER_ON_PROJECT_FROM_NAME;
-    private PreparedStatement PROGRAMMER_ON_PROJECT_FROM_ID;
-    private PreparedStatement PROGRAMMER_ON_LANGUAGE_JAVA;
-    private PreparedStatement PROGRAMMER_ON_LANGUAGE;
-    private PreparedStatement PROGRAMMER_LEVEL;
+    private final PreparedStatement SALARY_ON_PROJECT_FROM_NAME;
+    private final PreparedStatement SALARY_ON_PROJECT_FROM_ID;
+    private final PreparedStatement PROGRAMMER_ON_PROJECT_FROM_NAME;
+    private final PreparedStatement PROGRAMMER_ON_PROJECT_FROM_ID;
+    private final PreparedStatement PROGRAMMER_ON_LANGUAGE_JAVA;
+    private final PreparedStatement PROGRAMMER_ON_LANGUAGE;
+    private final PreparedStatement PROGRAMMER_LEVEL;
 
     public DevelopersDao(DatabaseSqlManagerConnector sqlConnector) {
         this.sqlConnector = sqlConnector;
@@ -151,7 +151,7 @@ public class DevelopersDao implements ServiceCrud<Developers> {
         }
     }
 
-    public Integer calculateSalaryOnProjectFromId(int project_id) {
+    public Integer calculateSalaryOnProjectFromId(Integer project_id) {
         try {
             SALARY_ON_PROJECT_FROM_ID.setInt(1, project_id);
         } catch (SQLException e) {
@@ -184,12 +184,12 @@ public class DevelopersDao implements ServiceCrud<Developers> {
         return programmerOnProjectFromId;
     }
 
-    public List<Developers> showProgrammerOnProjectFromProjectId(int project_id){
+    public List<Developers> showProgrammerOnProjectFromProjectId(Integer project_id){
         List<Developers> programmerOnProjectFromId = new ArrayList<>();
         try {
             PROGRAMMER_ON_PROJECT_FROM_ID.setInt(1, project_id);
-        } catch (SQLException e) {
-
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         try (ResultSet rs = PROGRAMMER_ON_PROJECT_FROM_ID.executeQuery()) {
             while (rs.next()) {

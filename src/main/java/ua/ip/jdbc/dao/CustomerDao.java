@@ -27,7 +27,8 @@ public class CustomerDao implements ServiceCrud<Customers>{
         INSERT_CUSTOMER = connection.prepareStatement("INSERT INTO customers(id,name,website) VALUES(?,?,?)");
         SELECT_CUSTOMER_BY_ID = connection.prepareStatement("SELECT id,name,website FROM customers WHERE id = ?");
         SELECT_ALL_CUSTOMERS = connection.prepareStatement("SELECT * FROM customers");
-        UPDATE_CUSTOMER = connection.prepareStatement("UPDATE customers SET id = ?,name = ?,website = ?  WHERE id = ?");
+        UPDATE_CUSTOMER = connection.prepareStatement("UPDATE customers SET id = ?,name = ?,website = ?  " +
+                "WHERE id = ?");
         DELETE_CUSTOMER = connection.prepareStatement("DELETE FROM customers WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -68,7 +69,7 @@ public class CustomerDao implements ServiceCrud<Customers>{
 
 
     @Override
-    public List findAll() {
+    public List<Customers> findAll() {
         List<Customers> allCustomers = new ArrayList<>();
         try (ResultSet rs = SELECT_ALL_CUSTOMERS.executeQuery()) {
             while (rs.next()) {
