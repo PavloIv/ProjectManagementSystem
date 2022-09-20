@@ -115,10 +115,15 @@ public class DevelopersCrudState extends CliState {
     }
 
     private void update() {
+        Integer developerId = null;
+        while (true) {
+            System.out.println("Write developer id:");
+            developerId = fsm.writeDigit();
 
-        System.out.println("Write developer id:");
-        Integer developerId = fsm.writeDigit();
-
+            if (developersDao.findById(developerId) == null) {
+                System.out.println("Programmer not found.Please try again");
+            }else {break;}
+        }
         System.out.println("Write developer name:");
         String developerName = fsm.getScanner().nextLine();
 

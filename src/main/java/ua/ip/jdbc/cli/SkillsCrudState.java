@@ -78,9 +78,16 @@ public class SkillsCrudState extends CliState{
     }
 
     private void update() {
+        Integer skillId = null;
+        while (true) {
+            System.out.println("Write skill id:");
+            skillId = fsm.writeDigit();
 
-        System.out.println("Write skill id:");
-        Integer skillId = fsm.writeDigit();
+            if (skillsDao.findById(skillId) == null) {
+                System.out.println("Skill not found.Please try again");
+            }else {break;}
+        }
+
 
         System.out.println("Write language:");
         String skillLanguage = fsm.getScanner().nextLine();

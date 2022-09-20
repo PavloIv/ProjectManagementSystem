@@ -1,5 +1,8 @@
 package ua.ip.jdbc.table;
 
+
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public  class Projects {
@@ -9,12 +12,12 @@ public  class Projects {
     private Integer cost;
     private Integer company_id;
     private Integer customer_id;
+    private Date creationDate = Date.valueOf(LocalDate.now());
 
-    public Projects(Integer id, String name, String description, Integer cost, Integer company_id, Integer customer_id) {
+    public Projects(Integer id, String name, String description, Integer company_id, Integer customer_id) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.cost = cost;
         this.company_id = company_id;
         this.customer_id = customer_id;
     }
@@ -68,6 +71,10 @@ public  class Projects {
 
     public void setCustomer_id(Integer customer_id) {
         this.customer_id = customer_id;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 
     @Override

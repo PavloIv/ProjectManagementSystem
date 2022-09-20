@@ -24,7 +24,7 @@ public class CustomerDao implements ServiceCrud<Customers>{
         this.sqlConnector = sqlConnector;
         Connection connection = sqlConnector.getConnection();
         try {
-        INSERT_CUSTOMER = connection.prepareStatement("INSERT INTO customers(id,name,website) VALUES(?,?,?)");
+        INSERT_CUSTOMER = connection.prepareStatement("INSERT INTO customers(name,website) VALUES(?,?)");
         SELECT_CUSTOMER_BY_ID = connection.prepareStatement("SELECT id,name,website FROM customers WHERE id = ?");
         SELECT_ALL_CUSTOMERS = connection.prepareStatement("SELECT * FROM customers");
         UPDATE_CUSTOMER = connection.prepareStatement("UPDATE customers SET id = ?,name = ?,website = ?  " +
@@ -38,9 +38,8 @@ public class CustomerDao implements ServiceCrud<Customers>{
     @Override
     public boolean create(Customers entity) {
         try {
-            INSERT_CUSTOMER.setInt(1, entity.getId());
-            INSERT_CUSTOMER.setString(2, entity.getName());
-            INSERT_CUSTOMER.setString(3,entity.getWebsite());
+            INSERT_CUSTOMER.setString(1, entity.getName());
+            INSERT_CUSTOMER.setString(2,entity.getWebsite());
             return INSERT_CUSTOMER.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();

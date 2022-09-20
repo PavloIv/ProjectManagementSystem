@@ -4,10 +4,7 @@ import ua.ip.jdbc.storage.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Projects;
 import ua.ip.jdbc.table.ProjectsFormatCreationDateNameNumberProgrammer;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +22,12 @@ public class ProjectsDao implements ServiceCrud<Projects> {
         Connection connection = sqlConnector.getConnection();
         try {
             INSERT_PROJECT = connection.prepareStatement("INSERT INTO projects" +
-                    "(id,name,description,cost,company_id,customer_id) VALUES(?,?,?,?,?,?)");
+                    "(name,description,company_id,customer_id,creation_date) VALUES(?,?,?,?,?)");
             SELECT_PROJECT_BY_ID = connection.prepareStatement("SELECT id,name,description,cost,company_id," +
                     "customer_id FROM projects WHERE id = ?");
             SELECT_ALL_PROJECTS = connection.prepareStatement("SELECT * FROM projects");
-            UPDATE_PROJECT = connection.prepareStatement("UPDATE projects SET id = ?,name = ?,description = ?," +
-                    "cost = ?, company_id = ?,customer_id = ?  WHERE id = ?");
+            UPDATE_PROJECT = connection.prepareStatement("UPDATE projects SET id = ?,name = ?,description = ?" +
+                    ", company_id = ?,customer_id = ?  WHERE id = ?");
             DELETE_PROJECT = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
             PROJECT_LIST = connection.prepareStatement("SELECT  creation_date,name," +
                     "COUNT(developers_projects.developer_id) as Number_programer_on_project " +
@@ -45,12 +42,11 @@ public class ProjectsDao implements ServiceCrud<Projects> {
     @Override
     public boolean create(Projects entity) {
         try {
-            INSERT_PROJECT.setInt(1, entity.getId());
-            INSERT_PROJECT.setString(2, entity.getName());
-            INSERT_PROJECT.setString(3, entity.getDescription());
-            INSERT_PROJECT.setInt(4, entity.getCost());
-            INSERT_PROJECT.setInt(5, entity.getCompany_id());
-            INSERT_PROJECT.setInt(6, entity.getCustomer_id());
+            INSERT_PROJECT.setString(1, entity.getName());
+            INSERT_PROJECT.setString(2, entity.getDescription());
+            INSERT_PROJECT.setInt(3, entity.getCompany_id());
+            INSERT_PROJECT.setInt(4, entity.getCustomer_id());
+            INSERT_PROJECT.setDate(5, entity.getCreationDate());
 
             return INSERT_PROJECT.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -96,10 +92,9 @@ public class ProjectsDao implements ServiceCrud<Projects> {
             UPDATE_PROJECT.setInt(1, entity.getId());
             UPDATE_PROJECT.setString(2, entity.getName());
             UPDATE_PROJECT.setString(3, entity.getDescription());
-            UPDATE_PROJECT.setInt(4, entity.getCost());
-            UPDATE_PROJECT.setInt(5, entity.getCompany_id());
-            UPDATE_PROJECT.setInt(6, entity.getCustomer_id());
-            UPDATE_PROJECT.setInt(7, entity.getId());
+            UPDATE_PROJECT.setInt(4, entity.getCompany_id());
+            UPDATE_PROJECT.setInt(5, entity.getCustomer_id());
+            UPDATE_PROJECT.setInt(6, entity.getId());
 
             return UPDATE_PROJECT.executeUpdate() == 1;
 

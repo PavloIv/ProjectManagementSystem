@@ -22,7 +22,7 @@ public class SkillsDao implements ServiceCrud<Skills> {
         this.sqlConnector = sqlConnector;
         Connection connection = sqlConnector.getConnection();
         try {
-            INSERT_SKILL = connection.prepareStatement("INSERT INTO skills(id,language,level) VALUES(?,?,?)");
+            INSERT_SKILL = connection.prepareStatement("INSERT INTO skills(language,level) VALUES(?,?)");
             SELECT_SKILL_BY_ID = connection.prepareStatement("SELECT id,language,level FROM skills WHERE id = ?");
             SELECT_ALL_SKILLS = connection.prepareStatement("SELECT * FROM skills");
             UPDATE_SKILL = connection.prepareStatement("UPDATE skills SET id = ?,language = ?,level = ?" +
@@ -36,9 +36,8 @@ public class SkillsDao implements ServiceCrud<Skills> {
     @Override
     public boolean create(Skills entity) {
         try {
-            INSERT_SKILL.setInt(1, entity.getId());
-            INSERT_SKILL.setString(2, entity.getLanguage());
-            INSERT_SKILL.setString(3, entity.getLevel());
+            INSERT_SKILL.setString(1, entity.getLanguage());
+            INSERT_SKILL.setString(2, entity.getLevel());
             return INSERT_SKILL.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();

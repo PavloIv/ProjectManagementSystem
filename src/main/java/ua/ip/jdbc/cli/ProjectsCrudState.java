@@ -1,5 +1,7 @@
 package ua.ip.jdbc.cli;
 
+import ua.ip.jdbc.dao.CompaniesDAO;
+import ua.ip.jdbc.dao.CustomerDao;
 import ua.ip.jdbc.dao.ProjectsDao;
 import ua.ip.jdbc.table.Projects;
 
@@ -7,6 +9,8 @@ import ua.ip.jdbc.table.Projects;
 public class ProjectsCrudState extends CliState{
 
     private ProjectsDao projectsDao;
+    private CompaniesDAO companiesDAO;
+    private CustomerDao customerDao;
     public ProjectsCrudState(CliFSM fsm) {
         super(fsm);
     }
@@ -21,6 +25,8 @@ public class ProjectsCrudState extends CliState{
         System.out.println("'show' for see list programmer in format creationDate nameNumber numberProgrammerOnProject");
         System.out.println("'back' for back to previous menu");
         projectsDao = new ProjectsDao(fsm.getSqlConnector());
+        companiesDAO = new CompaniesDAO(fsm.getSqlConnector());
+        customerDao = new CustomerDao(fsm.getSqlConnector());
         String command = fsm.getScanner().nextLine();
         startCustomersCrudLoop(command);
     }
@@ -29,7 +35,7 @@ public class ProjectsCrudState extends CliState{
         boolean back = false;
         switch (command) {
             case "create":
-                createNewDeveloper();
+                create();
                 break;
             case "read":
                 readTable();
@@ -60,26 +66,38 @@ public class ProjectsCrudState extends CliState{
         }
     }
 
-    private void createNewDeveloper() {
+    private void create() {
         System.out.println("Write project name:");
         String projectName = fsm.getScanner().nextLine();
 
         System.out.println("Write project description:");
         String projectDescription = fsm.getScanner().nextLine();
 
-        System.out.println("Write project cost:");
-        Integer projectCost = fsm.writeDigit();
+        System.out.println(companiesDAO.findAll());
+        System.out.println("Write company id from list companies upper:");
+        Integer companyId;
+        while (true) {
+            companyId = fsm.writeDigit();
 
-        System.out.println("Write company id:");
-        Integer companyId = fsm.writeDigit();
+            if (companiesDAO.findById(companyId) == null) {
+                System.out.println("Company not found.Please try again");
+            }else {break;}
+        }
 
-        System.out.println("Write customer id:");
-        Integer customerId = fsm.writeDigit();
+        System.out.println(customerDao.findAll());
+        System.out.println("Write customer id from list customers upper:");
+        Integer customerId;
+        while (true) {
+            customerId = fsm.writeDigit();
+
+            if (customerDao.findById(customerId) == null) {
+                System.out.println("Customer not found.Please try again");
+            }else {break;}
+        }
 
         Projects project = new Projects();
         project.setName(projectName);
         project.setDescription(projectDescription);
-        project.setCost(projectCost);
         project.setCompany_id(companyId);
         project.setCustomer_id(customerId);
 
@@ -96,8 +114,15 @@ public class ProjectsCrudState extends CliState{
 
     private void update() {
 
-        System.out.println("Write project id:");
-        Integer projectId = fsm.writeDigit();
+        Integer projectId;
+        while (true) {
+            System.out.println("Write project id:");
+            projectId = fsm.writeDigit();
+
+            if (projectsDao.findById(projectId) == null) {
+                System.out.println("Project not found.Please try again");
+            }else {break;}
+        }
 
         System.out.println("Write project name:");
         String projectName = fsm.getScanner().nextLine();
@@ -105,20 +130,33 @@ public class ProjectsCrudState extends CliState{
         System.out.println("Write project description:");
         String projectDescription = fsm.getScanner().nextLine();
 
-        System.out.println("Write project cost:");
-        Integer projectCost = fsm.writeDigit();
+        System.out.println(companiesDAO.findAll());
+        System.out.println("Write company id from list companies upper:");
+        Integer companyId;
+        while (true) {
+            companyId = fsm.writeDigit();
 
-        System.out.println("Write company id:");
-        Integer companyId = fsm.writeDigit();
+            if (companiesDAO.findById(companyId) == null) {
+                System.out.println("Company not found.Please try again");
+            }else {break;}
+        }
 
-        System.out.println("Write customer id:");
-        Integer customerId = fsm.writeDigit();
+        System.out.println(customerDao.findAll());
+        System.out.println("Write customer id from list customers upper:");
+        Integer customerId;
+        while (true) {
+            customerId = fsm.writeDigit();
 
-        Projects project = new Projects(projectId,projectName,projectDescription,projectCost,companyId,customerId);
+            if (customerDao.findById(customerId) == null) {
+                System.out.println("Customer not found.Please try again");
+            }else {break;}
+        }
+
+        Projects project = new Projects(projectId,projectName,projectDescription,companyId,customerId);
 
         projectsDao.update(project);
 
-        System.out.printf("Project with id = %s update.", companyId);
+        System.out.printf("Project with id = %s update.", projectId);
     }
 
     private void delete() {

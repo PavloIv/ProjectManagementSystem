@@ -10,6 +10,7 @@ public class CustomerCrudState extends CliState{
     public CustomerCrudState(CliFSM fsm) {
         super(fsm);
     }
+
     @Override
     public void init() {
         System.out.println("Please, write command with list:");
@@ -28,7 +29,7 @@ public class CustomerCrudState extends CliState{
         boolean back = false;
         switch (command) {
             case "create":
-                createNewDeveloper();
+                create();
                 break;
             case "read":
                 readTable();
@@ -56,7 +57,7 @@ public class CustomerCrudState extends CliState{
         }
     }
 
-    private void createNewDeveloper() {
+    private void create() {
         System.out.println("Write customer name:");
         String customerName = fsm.getScanner().nextLine();
 
