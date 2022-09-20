@@ -2,7 +2,7 @@ package ua.ip.jdbc.service;
 
 import ua.ip.jdbc.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Developers;
-import ua.ip.jdbc.table.ProjectsV2;
+import ua.ip.jdbc.table.ProjectsFormatCreationDateNameNumberProgramer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -112,8 +112,8 @@ public class Service {
         return programmerLevel;
     }
 
-    public List<ProjectsV2> projectsList() throws SQLException {
-        List<ProjectsV2> programmerLevel = new ArrayList<>();
+    public List<ProjectsFormatCreationDateNameNumberProgramer> projectsList() throws SQLException {
+        List<ProjectsFormatCreationDateNameNumberProgramer> programmerLevel = new ArrayList<>();
         try (ResultSet rs = PROJECT_LIST.executeQuery()) {
             while (rs.next()) {
                 programmerLevel.add(convertProjectsV2(rs));
@@ -134,12 +134,12 @@ public class Service {
         return developer;
     }
 
-    private ProjectsV2 convertProjectsV2(ResultSet resultSet) throws SQLException {
-        ProjectsV2 projectsV2 = new ProjectsV2();
-        projectsV2.setCreationDate(String.valueOf(resultSet.getDate("creation_date")));
-        projectsV2.setName(resultSet.getString("name"));
-        projectsV2.setNumberProgramerOnProject(resultSet.getInt("Number_programer_on_project"));
-        return projectsV2;
+    private ProjectsFormatCreationDateNameNumberProgramer convertProjectsV2(ResultSet resultSet) throws SQLException {
+        ProjectsFormatCreationDateNameNumberProgramer projectsFormatCreationDateNameNumberProgramer = new ProjectsFormatCreationDateNameNumberProgramer();
+        projectsFormatCreationDateNameNumberProgramer.setCreationDate(String.valueOf(resultSet.getDate("creation_date")));
+        projectsFormatCreationDateNameNumberProgramer.setName(resultSet.getString("name"));
+        projectsFormatCreationDateNameNumberProgramer.setNumberProgramerOnProject(resultSet.getInt("Number_programer_on_project"));
+        return projectsFormatCreationDateNameNumberProgramer;
     }
 
 }

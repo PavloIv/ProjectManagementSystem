@@ -47,5 +47,12 @@ public class Companies {
         Companies companies = (Companies) o;
         return Objects.equals(id, companies.id) && Objects.equals(name, companies.name) && Objects.equals(year_of_foundation, companies.year_of_foundation);
     }
-
+    @Override
+    public String toString() {
+        return  "\n" + "{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", year_of_foundation=" + year_of_foundation +
+                '}' + "\n";
+    }
 }

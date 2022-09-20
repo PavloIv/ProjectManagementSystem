@@ -17,11 +17,7 @@ class ProjectsDaoTest {
     ProjectsDao testProjectsDao;
 
     {
-        try {
-            testProjectsDao = new ProjectsDao(sqlConnector);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        testProjectsDao = new ProjectsDao(sqlConnector);
     }
 
     @Test

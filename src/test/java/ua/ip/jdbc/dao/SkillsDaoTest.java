@@ -17,11 +17,7 @@ class SkillsDaoTest {
     SkillsDao testServiceSkill;
 
     {
-        try {
-            testServiceSkill = new SkillsDao(SqlConnector);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        testServiceSkill = new SkillsDao(SqlConnector);
     }
 
     @Test

@@ -14,13 +14,18 @@ public class DevelopersCrudState extends CliState {
     @Override
     public void init() {
         System.out.println("Please, write command with list:");
-        System.out.println("create");
-        System.out.println("read");
-        System.out.println("update");
-        System.out.println("delete");
-        System.out.println("find");
-        System.out.println("salary on project");
-        System.out.println("back");
+        System.out.println("'create' for create new developer");
+        System.out.println("'read' for see list all developers ");
+        System.out.println("'update' for update developer with id");
+        System.out.println("'delete' for delete developer with id");
+        System.out.println("'find' for see  developer with id" );
+        System.out.println("'salaryProject' for see total salary on project with name");
+        System.out.println("'salaryId' for see total salary on project with id");
+        System.out.println("'showProject' for see  programmer on project with name");
+        System.out.println("'showId' for see  programmer on project with id");
+        System.out.println("'showLanguage' for see  programmer develop on language");
+        System.out.println("'showLevel' for see programmer with skill level");
+        System.out.println("'back' for back to previous menu");
         developersDao = new DevelopersDao(fsm.getSqlConnector());
         String command = fsm.getScanner().nextLine();
         startDevelopersCrudLoop(command);
@@ -36,7 +41,7 @@ public class DevelopersCrudState extends CliState {
                 readTable();
                 break;
             case "update":
-                updateDeveloper();
+                update();
                 break;
             case "delete":
                 deleteDeveloper();
@@ -44,22 +49,22 @@ public class DevelopersCrudState extends CliState {
             case "find":
                 findDeveloperWithId();
                 break;
-            case "salary on project":
+            case "salaryProject":
                 calculateSalaryOnProjectFromName();
                 break;
-            case "salary on project with id":
+            case "salaryId":
                 calculateSalaryOnProjectFromId();
                 break;
-            case "show programmer on project":
+            case "showProject":
                 showProgrammerOnProjectFromProjectName();
                 break;
-            case "show programmer on project with id":
+            case "showId":
                 showProgrammerOnProjectFromProjectId();
                 break;
-            case "show programmer on language":
+            case "showLanguage":
                 showProgrammerOnLanguage();
                 break;
-            case "show programmer with level":
+            case "showLevel":
                 showProgrammersWithLevel();
                 break;
             case "back":
@@ -80,17 +85,19 @@ public class DevelopersCrudState extends CliState {
         System.out.println("Write developer name:");
         String developerName = fsm.getScanner().nextLine();
 
+        System.out.println("Write developer age");
+        Integer developerAge = fsm.writeDigit();
+
         System.out.println("Write developer sex:");
         String developerSex = fsm.getScanner().nextLine();
 
-        System.out.println("Write developer age:");
-        int developerAge = fsm.getScanner().nextInt();
-
         System.out.println("Write developer salary:");
-        int developerSalary = fsm.getScanner().nextInt();
-
-
-        Developers developer = new Developers(developerName, developerAge, developerSex, developerSalary);
+        Integer developerSalary = fsm.writeDigit();
+        Developers developer = new Developers();
+        developer.setName(developerName);
+        developer.setAge(developerAge);
+        developer.setSex(developerSex);
+        developer.setSalary(developerSalary);
 
         if (developersDao.create(developer)) {
             System.out.println("Developer add to database");
@@ -103,35 +110,24 @@ public class DevelopersCrudState extends CliState {
         System.out.println("All developers list = " + developersDao.findAll());
     }
 
-    private void findDeveloperWithId() {
-        System.out.println("Write developer id:");
-        int developerId = fsm.getScanner().nextInt();
+    private void update() {
 
-        System.out.printf("Developer:", developerId);
-        System.out.println(developersDao.findById(developerId));
-    }
-
-    private void updateDeveloper() {
-        Developers developer = new Developers();
         System.out.println("Write developer id:");
-        int developerId = fsm.getScanner().nextInt();
-        developer.setId(developerId);
+        Integer developerId = fsm.writeDigit();
 
         System.out.println("Write developer name:");
         String developerName = fsm.getScanner().nextLine();
-        developer.setName(developerName);
 
         System.out.println("Write developer age:");
-        int developerAge = fsm.getScanner().nextInt();
-        developer.setAge(developerAge);
+        Integer developerAge = fsm.writeDigit();
 
         System.out.println("Write developer sex:");
         String developerSex = fsm.getScanner().nextLine();
-        developer.setSex(developerSex);
 
         System.out.println("Write developer salary:");
-        int developerSalary = fsm.getScanner().nextInt();
-        developer.setSalary(developerSalary);
+        Integer developerSalary = fsm.writeDigit();
+
+        Developers developer = new Developers(developerId,developerName,developerAge,developerSex,developerSalary);
 
         developersDao.update(developer);
 
@@ -140,49 +136,17 @@ public class DevelopersCrudState extends CliState {
 
     private void deleteDeveloper() {
         System.out.println("Write developer id to delete:");
-        int developerId = fsm.getScanner().nextInt();
+        int developerId = fsm.writeDigit();
         developersDao.delete(developerId);
         System.out.println("Developer delete is complete.");
     }
 
-    private void showProgrammersWithLevel() {
-        System.out.println("Write language:");
-        String languageName = fsm.getScanner().nextLine();
+    private void findDeveloperWithId() {
+        System.out.println("Write developer id:");
+        Integer developerId = fsm.writeDigit();
 
-        System.out.printf("List of programmers working on the language %s : ", languageName);
-        System.out.println(developersDao.showProgrammerOnLanguage(languageName));
-    }
-
-    private void showProgrammerOnLanguage() {
-        System.out.println("Write language:");
-        String languageName = fsm.getScanner().nextLine();
-
-        System.out.printf("List of programmers working on the language %s : ", languageName);
-        System.out.println(developersDao.showProgrammerOnLanguage(languageName));
-    }
-
-    private void showProgrammerOnProjectFromProjectId() {
-        System.out.println("Write project id:");
-        int projectId = fsm.getScanner().nextInt();
-
-        System.out.printf("List of programmers working on the project with id %s : ", projectId);
-        System.out.println(developersDao.showProgrammerOnProjectFromProjectId(projectId));
-    }
-
-    private void showProgrammerOnProjectFromProjectName() {
-        System.out.println("Write project name:");
-        String projectName = fsm.getScanner().nextLine();
-
-        System.out.printf("List of programmers working on the project %s : ", projectName);
-        System.out.println(developersDao.showProgrammerOnProjectFromProjectName(projectName));
-    }
-
-    private void calculateSalaryOnProjectFromId() {
-        System.out.println("Write project id:");
-        int projectId = fsm.getScanner().nextInt();
-
-        System.out.printf("SumSalary on project %s = ", projectId);
-        System.out.println(developersDao.calculateSalaryOnProjectFromId(projectId));
+        System.out.print("Developer :");
+        System.out.println(developersDao.findById(developerId));
     }
 
     private void calculateSalaryOnProjectFromName() {
@@ -193,5 +157,43 @@ public class DevelopersCrudState extends CliState {
         System.out.println(developersDao.calculateSalaryOnProjectFromName(projectName));
     }
 
+    private void calculateSalaryOnProjectFromId() {
+        System.out.println("Write project id:");
+        Integer projectId = fsm.writeDigit();
 
+        System.out.printf("SumSalary on project %s = ", projectId);
+        System.out.println(developersDao.calculateSalaryOnProjectFromId(projectId));
+    }
+
+    private void showProgrammerOnProjectFromProjectName() {
+        System.out.println("Write project name:");
+        String projectName = fsm.getScanner().nextLine();
+
+        System.out.printf("List of programmers working on the project %s : ", projectName);
+        System.out.println(developersDao.showProgrammerOnProjectFromProjectName(projectName));
+    }
+
+    private void showProgrammerOnProjectFromProjectId() {
+        System.out.println("Write project id:");
+        Integer projectId = fsm.writeDigit();
+
+        System.out.printf("List of programmers working on the project with id %s : ", projectId);
+        System.out.println(developersDao.showProgrammerOnProjectFromProjectId(projectId));
+    }
+
+    private void showProgrammerOnLanguage() {
+        System.out.println("Write language:");
+        String languageName = fsm.getScanner().nextLine();
+
+        System.out.printf("List of programmers working on the language %s : ", languageName);
+        System.out.println(developersDao.showProgrammerOnLanguage(languageName));
+    }
+
+    private void showProgrammersWithLevel() {
+        System.out.println("Write language:");
+        String languageName = fsm.getScanner().nextLine();
+
+        System.out.printf("List of programmers working on the language %s : ", languageName);
+        System.out.println(developersDao.showProgrammerOnLanguage(languageName));
+    }
 }

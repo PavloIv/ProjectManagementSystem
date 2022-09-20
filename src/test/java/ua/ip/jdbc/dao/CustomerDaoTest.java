@@ -17,11 +17,7 @@ class CustomerDaoTest {
     CustomerDao testServiceCustomers;
 
     {
-        try {
-            testServiceCustomers = new CustomerDao(sqlConnector);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        testServiceCustomers = new CustomerDao(sqlConnector);
     }
 
     @Test

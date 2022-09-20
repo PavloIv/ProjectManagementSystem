@@ -48,4 +48,12 @@ public  class Customers {
         return Objects.equals(id, customers.id) && Objects.equals(name, customers.name) && Objects.equals(Website, customers.Website);
     }
 
+    @Override
+    public String toString() {
+        return  "\n" + "{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", Website='" + Website + '\'' +
+                '}' + "\n";
+    }
 }

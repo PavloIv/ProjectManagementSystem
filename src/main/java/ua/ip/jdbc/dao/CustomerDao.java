@@ -20,14 +20,18 @@ public class CustomerDao implements ServiceCrud<Customers>{
 
 
 
-    public CustomerDao(DatabaseSqlManagerConnector sqlConnector) throws SQLException {
+    public CustomerDao(DatabaseSqlManagerConnector sqlConnector) {
         this.sqlConnector = sqlConnector;
         Connection connection = sqlConnector.getConnection();
+        try {
         INSERT_CUSTOMER = connection.prepareStatement("INSERT INTO customers(id,name,website) VALUES(?,?,?)");
         SELECT_CUSTOMER_BY_ID = connection.prepareStatement("SELECT id,name,website FROM customers WHERE id = ?");
         SELECT_ALL_CUSTOMERS = connection.prepareStatement("SELECT * FROM customers");
         UPDATE_CUSTOMER = connection.prepareStatement("UPDATE customers SET id = ?,name = ?,website = ?  WHERE id = ?");
         DELETE_CUSTOMER = connection.prepareStatement("DELETE FROM customers WHERE id = ?");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -45,8 +49,12 @@ public class CustomerDao implements ServiceCrud<Customers>{
 
 
     @Override
-    public Customers findById(Integer id) throws SQLException {
-        SELECT_CUSTOMER_BY_ID.setInt(1, id);
+    public Customers findById(Integer id){
+        try {
+            SELECT_CUSTOMER_BY_ID.setInt(1, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try (ResultSet rs = SELECT_CUSTOMER_BY_ID.executeQuery()) {
             if (!rs.next()) {
                 return null;

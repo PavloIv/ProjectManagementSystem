@@ -23,6 +23,7 @@ public class CliFSM {
         System.out.println("company");
         System.out.println("customer");
         System.out.println("project");
+        System.out.println("Or write 'exit' for finish work with program");
     }
 
     public void setState(CliState state) {
@@ -60,6 +61,9 @@ public class CliFSM {
                 case "project":
                     workingWithProjectCrud();
                     break;
+                case "exit":
+                    System.exit(0);
+                    break;
                 default:
                     unknownTable(command);
                     break;
@@ -90,5 +94,17 @@ public class CliFSM {
 
     public void unknownTable(String cmd){
         state.unknownTable(cmd);
+    }
+    public int writeDigit() {
+        Integer digit = null;
+        while (true) {
+            try {
+                digit = Integer.parseInt(getScanner().nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid values.Write digits");
+            }
+        }
+        return digit;
     }
 }

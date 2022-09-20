@@ -49,5 +49,12 @@ public class Skills {
         return Objects.equals(id, skills.id) && Objects.equals(language, skills.language) && Objects.equals(level, skills.level);
     }
 
-
+    @Override
+    public String toString() {
+        return  "\n" + "{" +
+                "id=" + id +
+                ", language='" + language + '\'' +
+                ", level='" + level + '\'' +
+                '}'+ '\n';
+    }
 }

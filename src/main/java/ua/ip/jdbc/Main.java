@@ -17,6 +17,7 @@ public class Main {
         new CliFSM(sqlConnector);
 
 
+
 //        Service service = new Service(sqlConnector);
 //        System.out.println("SumSalary on project MobileApp = " + service.salaryOnProjectFromName("MobileApp"));
 //

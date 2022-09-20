@@ -19,16 +19,21 @@ public class CompaniesDAO implements ServiceCrud<Companies> {
     private final PreparedStatement UPDATE_COMPANY;
     private final PreparedStatement DELETE_COMPANY;
 
-    public CompaniesDAO(DatabaseSqlManagerConnector sqlConnector) throws SQLException {
+    public CompaniesDAO(DatabaseSqlManagerConnector sqlConnector) {
         this.sqlConnector = sqlConnector;
         Connection connection = sqlConnector.getConnection();
-        INSERT_COMPANY = connection.prepareStatement("INSERT INTO companies (id,name,year_of_foundation) VALUES(?,?,?)");
-        SELECT_COMPANIES_BY_ID = connection.prepareStatement("SELECT id,name,year_of_foundation FROM companies WHERE id = ?");
-        SELECT_ALL_COMPANIES = connection.prepareStatement("SELECT * FROM companies");
-        UPDATE_COMPANY = connection.prepareStatement("UPDATE companies SET id = ?,name = ?," +
-                "year_of_foundation = ?  WHERE id = ?");
-        DELETE_COMPANY = connection.prepareStatement("DELETE FROM companies WHERE id = ?");
-
+        try {
+            INSERT_COMPANY = connection.prepareStatement("INSERT INTO companies (id,name,year_of_foundation) " +
+                    "VALUES(?,?,?)");
+            SELECT_COMPANIES_BY_ID = connection.prepareStatement("SELECT id,name,year_of_foundation FROM companies " +
+                    "WHERE id = ?");
+            SELECT_ALL_COMPANIES = connection.prepareStatement("SELECT * FROM companies");
+            UPDATE_COMPANY = connection.prepareStatement("UPDATE companies SET id = ?,name = ?," +
+                    "year_of_foundation = ?  WHERE id = ?");
+            DELETE_COMPANY = connection.prepareStatement("DELETE FROM companies WHERE id = ?");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -45,8 +50,12 @@ public class CompaniesDAO implements ServiceCrud<Companies> {
     }
 
     @Override
-    public Companies findById(Integer id) throws SQLException {
-        SELECT_COMPANIES_BY_ID.setInt(1, id);
+    public Companies findById(Integer id) {
+        try {
+            SELECT_COMPANIES_BY_ID.setInt(1, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try (ResultSet rs = SELECT_COMPANIES_BY_ID.executeQuery()) {
             if (!rs.next()) {
                 return null;
@@ -97,12 +106,15 @@ public class CompaniesDAO implements ServiceCrud<Companies> {
         return false;
     }
 
-    private Companies convertCompanies(ResultSet resultSet) throws SQLException {
+    private Companies convertCompanies(ResultSet resultSet) {
         Companies companies = new Companies();
-        companies.setId(resultSet.getInt("id"));
-        companies.setName(resultSet.getString("name"));
-        companies.setYear_of_foundation(resultSet.getInt("year_of_foundation"));
-
+        try {
+            companies.setId(resultSet.getInt("id"));
+            companies.setName(resultSet.getString("name"));
+            companies.setYear_of_foundation(resultSet.getInt("year_of_foundation"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return companies;
     }
 }

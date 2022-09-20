@@ -77,4 +77,16 @@ public  class Projects {
         Projects projects = (Projects) o;
         return Objects.equals(id, projects.id) && Objects.equals(name, projects.name) && Objects.equals(description, projects.description) && Objects.equals(cost, projects.cost) && Objects.equals(company_id, projects.company_id) && Objects.equals(customer_id, projects.customer_id);
     }
+
+    @Override
+    public String toString() {
+        return  "\n" + "{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", cost=" + cost +
+                ", company_id=" + company_id +
+                ", customer_id=" + customer_id +
+                '}' + "\n";
+    }
 }

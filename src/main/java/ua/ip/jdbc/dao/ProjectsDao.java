@@ -2,7 +2,7 @@ package ua.ip.jdbc.dao;
 
 import ua.ip.jdbc.storage.DatabaseSqlManagerConnector;
 import ua.ip.jdbc.table.Projects;
-import ua.ip.jdbc.table.ProjectsV2;
+import ua.ip.jdbc.table.ProjectsFormatCreationDateNameNumberProgramer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectsDao implements ServiceCrud<Projects>{
+public class ProjectsDao implements ServiceCrud<Projects> {
     private final DatabaseSqlManagerConnector sqlConnector;
     private final PreparedStatement INSERT_PROJECT;
     private final PreparedStatement SELECT_PROJECT_BY_ID;
@@ -20,22 +20,26 @@ public class ProjectsDao implements ServiceCrud<Projects>{
     private final PreparedStatement DELETE_PROJECT;
     private PreparedStatement PROJECT_LIST;
 
-    public ProjectsDao(DatabaseSqlManagerConnector sqlConnector) throws SQLException {
+    public ProjectsDao(DatabaseSqlManagerConnector sqlConnector) {
         this.sqlConnector = sqlConnector;
         Connection connection = sqlConnector.getConnection();
-        INSERT_PROJECT = connection.prepareStatement("INSERT INTO projects" +
-                "(id,name,description,cost,company_id,customer_id) VALUES(?,?,?,?,?,?)");
-        SELECT_PROJECT_BY_ID = connection.prepareStatement("SELECT id,name,description,cost,company_id,customer_id" +
-                " FROM projects WHERE id = ?"); ;
-        SELECT_ALL_PROJECTS = connection.prepareStatement("SELECT * FROM projects");
-        UPDATE_PROJECT = connection.prepareStatement("UPDATE projects SET id = ?,name = ?," + "description = ?," +
-                "cost = ?, company_id = ?,customer_id = ?  WHERE id = ?");
-        DELETE_PROJECT = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
-        PROJECT_LIST = connection.prepareStatement("SELECT  creation_date,name," +
-                "COUNT(developers_projects.developer_id) as Number_programer_on_project " +
-                "FROM projects LEFT JOIN developers_projects ON projects.id = developers_projects.project_id " +
-                "GROUP BY projects.id " +
-                "ORDER by projects.id");
+        try {
+            INSERT_PROJECT = connection.prepareStatement("INSERT INTO projects" +
+                    "(id,name,description,cost,company_id,customer_id) VALUES(?,?,?,?,?,?)");
+            SELECT_PROJECT_BY_ID = connection.prepareStatement("SELECT id,name,description,cost,company_id,customer_id" +
+                    " FROM projects WHERE id = ?");
+            SELECT_ALL_PROJECTS = connection.prepareStatement("SELECT * FROM projects");
+            UPDATE_PROJECT = connection.prepareStatement("UPDATE projects SET id = ?,name = ?," + "description = ?," +
+                    "cost = ?, company_id = ?,customer_id = ?  WHERE id = ?");
+            DELETE_PROJECT = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
+            PROJECT_LIST = connection.prepareStatement("SELECT  creation_date,name," +
+                    "COUNT(developers_projects.developer_id) as Number_programer_on_project " +
+                    "FROM projects LEFT JOIN developers_projects ON projects.id = developers_projects.project_id " +
+                    "GROUP BY projects.id " +
+                    "ORDER by projects.id");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -56,8 +60,12 @@ public class ProjectsDao implements ServiceCrud<Projects>{
     }
 
     @Override
-    public Projects findById(Integer id) throws SQLException {
-        SELECT_PROJECT_BY_ID.setInt(1, id);
+    public Projects findById(Integer id){
+        try {
+            SELECT_PROJECT_BY_ID.setInt(1, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try (ResultSet rs = SELECT_PROJECT_BY_ID.executeQuery()) {
             if (!rs.next()) {
                 return null;
@@ -67,7 +75,6 @@ public class ProjectsDao implements ServiceCrud<Projects>{
             return null;
         }
     }
-
 
 
     @Override
@@ -112,6 +119,7 @@ public class ProjectsDao implements ServiceCrud<Projects>{
         }
         return false;
     }
+
     private Projects convertProjects(ResultSet rs) throws SQLException {
         Projects project = new Projects();
         project.setId(rs.getInt("id"));
@@ -123,8 +131,8 @@ public class ProjectsDao implements ServiceCrud<Projects>{
         return project;
     }
 
-    public List<ProjectsV2> showProjectsList() throws SQLException {
-        List<ProjectsV2> programmerLevel = new ArrayList<>();
+    public List<ProjectsFormatCreationDateNameNumberProgramer> showProjectsListInFormat() {
+        List<ProjectsFormatCreationDateNameNumberProgramer> programmerLevel = new ArrayList<>();
         try (ResultSet rs = PROJECT_LIST.executeQuery()) {
             while (rs.next()) {
                 programmerLevel.add(convertProjectsV2(rs));
@@ -134,11 +142,12 @@ public class ProjectsDao implements ServiceCrud<Projects>{
         }
         return programmerLevel;
     }
-    private ProjectsV2 convertProjectsV2(ResultSet resultSet) throws SQLException {
-        ProjectsV2 projectsV2 = new ProjectsV2();
-        projectsV2.setCreationDate(String.valueOf(resultSet.getDate("creation_date")));
-        projectsV2.setName(resultSet.getString("name"));
-        projectsV2.setNumberProgramerOnProject(resultSet.getInt("Number_programer_on_project"));
-        return projectsV2;
+
+    private ProjectsFormatCreationDateNameNumberProgramer convertProjectsV2(ResultSet resultSet) throws SQLException {
+        ProjectsFormatCreationDateNameNumberProgramer projectsFormatCreationDateNameNumberProgramer = new ProjectsFormatCreationDateNameNumberProgramer();
+        projectsFormatCreationDateNameNumberProgramer.setCreationDate(String.valueOf(resultSet.getDate("creation_date")));
+        projectsFormatCreationDateNameNumberProgramer.setName(resultSet.getString("name"));
+        projectsFormatCreationDateNameNumberProgramer.setNumberProgramerOnProject(resultSet.getInt("Number_programer_on_project"));
+        return projectsFormatCreationDateNameNumberProgramer;
     }
 }

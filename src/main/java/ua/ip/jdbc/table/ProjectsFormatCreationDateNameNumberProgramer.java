@@ -1,6 +1,6 @@
 package ua.ip.jdbc.table;
 
-public class ProjectsV2 {
+public class ProjectsFormatCreationDateNameNumberProgramer {
     private String creationDate;
     private String name;
     private Integer numberProgramerOnProject;
@@ -31,10 +31,10 @@ public class ProjectsV2 {
 
     @Override
     public String toString() {
-        return "{" +
+        return "\n" + "{" +
                 "creationDate='" + creationDate + '\'' +
                 ", name='" + name + '\'' +
                 ", numberProgramerOnProject=" + numberProgramerOnProject +
-                '}';
+                '}' + "\n";
     }
 }
