@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         DatabaseSqlManagerConnector sqlConnector = new DatabaseSqlManagerConnector("localhost", "5432",
-                    "GrafProductCompany", "postgres", "grafmk1523");
+                    "YouDataBaseName", "YouUser", "YouPassword");
         new DatabaseInitService().initDb(sqlConnector.getUrl(), sqlConnector.getUser(), sqlConnector.getPassword());
 
         new CliFSM(sqlConnector);
